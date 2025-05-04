@@ -1,18 +1,20 @@
-name: CI/CD Pipeline
+name: Build and Test
 
 on:
   push:
-    branches: [main]
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout source code
         uses: actions/checkout@v3
 
-      - name: Set up JDK 17
+      - name: Set up Java
         uses: actions/setup-java@v3
         with:
           java-version: '17'
@@ -21,8 +23,8 @@ jobs:
       - name: Build with Maven
         run: mvn clean install
 
-      - name: Archive build output
+      - name: Upload build artifact
         uses: actions/upload-artifact@v3
         with:
-          name: build-artifact
+          name: target-artifacts
           path: target/*.jar
